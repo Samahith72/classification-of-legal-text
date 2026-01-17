@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 .env
-models/
-data/raw/
-.ipynb_checkpoints/
+venv/
+ml/models/
+ml/data/raw/
+node_modules/
