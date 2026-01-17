@@ -1,6 +1,11 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+from sklearn.svm import LinearSVC
+from sklearn.metrics import accuracy_score
+
+from feature_extraction import build_tfidf_vectorizer, fit_transform_text, transform_text
+
 
 from preprocessing import preprocess_text
 
@@ -31,22 +36,35 @@ def prepare_data(df):
 
 def split_data(df, test_size=0.2, random_state=42):
     """
-    Split dataset into train and test sets.
-    Uses stratified split only if all classes have >= 2 samples.
+    Split dataset into train and test sets with safety checks
+    for small datasets.
     """
     X = df["clean_text"]
     y = df["label_encoded"]
 
-    class_counts = y.value_counts()
+    num_classes = y.nunique()
+    num_samples = len(df)
 
-    if class_counts.min() < 2:
-        print("⚠️ Warning: Some classes have less than 2 samples. Using non-stratified split.")
-        return train_test_split(
-            X, y, test_size=test_size, random_state=random_state
+    # Minimum test samples needed for stratification
+    min_test_samples = num_classes
+
+    # Compute actual test size in samples
+    test_samples = int(num_samples * test_size)
+
+    # Adjust test_size if dataset is too small
+    if test_samples < min_test_samples:
+        test_size = min_test_samples / num_samples
+        print(
+            f"⚠️ Adjusted test_size to {test_size:.2f} "
+            f"to support {num_classes} classes."
         )
 
     return train_test_split(
-        X, y, test_size=test_size, random_state=random_state, stratify=y
+        X,
+        y,
+        test_size=test_size,
+        random_state=random_state,
+        stratify=y
     )
 
 
@@ -54,10 +72,34 @@ def split_data(df, test_size=0.2, random_state=42):
 if __name__ == "__main__":
     dataset_path = "data/raw/legal_dataset.csv"
 
+    # Load & prepare data
     df = load_dataset(dataset_path)
     df, label_encoder = prepare_data(df)
 
+    # Split
     X_train, X_test, y_train, y_test = split_data(df)
 
-    print("Train size:", len(X_train))
-    print("Test size:", len(X_test))
+    # TF-IDF
+    vectorizer = build_tfidf_vectorizer()
+    X_train_tfidf = fit_transform_text(X_train.tolist(), vectorizer)
+    X_test_tfidf = transform_text(X_test.tolist())
+
+    # Train SVM model
+    # Train SVM model (only if at least 2 classes exist)
+    if len(set(y_train)) < 2:
+        raise ValueError(
+            "Training data has only one class. "
+            "Please ensure at least 2 samples per class."
+        )
+
+    model = LinearSVC()
+    model.fit(X_train_tfidf, y_train)
+
+
+    # Predictions
+    y_pred = model.predict(X_test_tfidf)
+
+    # Accuracy
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"SVM Test Accuracy: {accuracy:.4f}")
+
