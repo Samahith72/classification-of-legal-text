@@ -72,7 +72,7 @@ def split_data(df, test_size=0.2, random_state=42):
 
 
 if __name__ == "__main__":
-    dataset_path = "data/raw/legal_dataset.csv"
+    dataset_path = "ml/data/raw/legal_dataset.csv"
 
     # Load & prepare data
     df = load_dataset(dataset_path)
