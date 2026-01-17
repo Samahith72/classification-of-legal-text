@@ -3,6 +3,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import LinearSVC
 from sklearn.metrics import accuracy_score
+from evaluate import evaluate_model
+
 
 from feature_extraction import build_tfidf_vectorizer, fit_transform_text, transform_text
 
@@ -101,5 +103,12 @@ if __name__ == "__main__":
 
     # Accuracy
     accuracy = accuracy_score(y_test, y_pred)
-    print(f"SVM Test Accuracy: {accuracy:.4f}")
+    #print(f"SVM Test Accuracy: {accuracy:.4f}")
+
+    # Predictions
+    y_pred = model.predict(X_test_tfidf)
+
+    # Evaluation
+    evaluate_model(y_test, y_pred, label_names=label_encoder.classes_)
+
 
