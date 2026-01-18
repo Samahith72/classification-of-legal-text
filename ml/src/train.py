@@ -1,4 +1,6 @@
 import pandas as pd
+import pickle
+from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import LinearSVC
@@ -97,6 +99,15 @@ if __name__ == "__main__":
     model = LinearSVC()
     model.fit(X_train_tfidf, y_train)
 
+    # Save trained model & artifacts
+    MODEL_DIR = Path("ml/models")
+    MODEL_DIR.mkdir(parents=True, exist_ok=True)
+
+    with open(MODEL_DIR / "svm_model.pkl", "wb") as f:
+        pickle.dump(model, f)
+
+    with open(MODEL_DIR / "label_encoder.pkl", "wb") as f:
+        pickle.dump(label_encoder, f)
 
     # Predictions
     y_pred = model.predict(X_test_tfidf)
