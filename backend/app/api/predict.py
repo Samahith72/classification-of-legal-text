@@ -1,11 +1,32 @@
-from fastapi import APIRouter
-from backend.app.api.schemas import PredictionRequest, PredictionResponse
+from fastapi import APIRouter, UploadFile, File, HTTPException
 from backend.app.services.classifier import predict_label
 
 router = APIRouter()
 
 
-@router.post("/predict", response_model=PredictionResponse)
-def predict(request: PredictionRequest):
-    label = predict_label(request.text)
-    return {"label": label}
+@router.post("/predict")
+async def predict(file: UploadFile = File(...)):
+    # Validate file type
+    if not file.filename.endswith(".txt"):
+        raise HTTPException(
+            status_code=400,
+            detail="Only .txt files are supported"
+        )
+
+    # Read file content
+    content = await file.read()
+    text = content.decode("utf-8").strip()
+
+    if not text:
+        raise HTTPException(
+            status_code=400,
+            detail="Uploaded file is empty"
+        )
+
+    # Predict label
+    label = predict_label(text)
+
+    return {
+        "filename": file.filename,
+        "prediction": label
+    }
