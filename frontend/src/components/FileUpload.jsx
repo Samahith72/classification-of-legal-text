@@ -1,10 +1,40 @@
 import { useState } from "react"
+import API from "../services/api"
 
 function FileUpload() {
   const [file, setFile] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState(null)
+  const [error, setError] = useState(null)
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0])
+    setResult(null)
+    setError(null)
+  }
+
+  const handleClassify = async () => {
+    if (!file) return
+
+    const formData = new FormData()
+    formData.append("file", file)
+
+    try {
+      setLoading(true)
+
+      const response = await API.post("/predict", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      })
+
+      setResult(response.data)
+    } catch (err) {
+      console.error(err)
+      setError("Failed to classify document. Is backend running?")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -39,12 +69,28 @@ function FileUpload() {
       <button
         style={{
           ...styles.classifyButton,
-          opacity: file ? 1 : 0.6
+          opacity: file && !loading ? 1 : 0.6
         }}
-        disabled={!file}
+        disabled={!file || loading}
+        onClick={handleClassify}
       >
-        Classify Document
+        {loading ? "Classifying..." : "Classify Document"}
       </button>
+
+      {result && (
+        <div style={{ marginTop: "16px", fontSize: "14px" }}>
+          <strong>Prediction Result</strong>
+          <pre style={{ marginTop: "8px" }}>
+            {JSON.stringify(result, null, 2)}
+          </pre>
+        </div>
+      )}
+
+      {error && (
+        <div style={{ marginTop: "12px", color: "red", fontSize: "14px" }}>
+          {error}
+        </div>
+      )}
     </div>
   )
 }
