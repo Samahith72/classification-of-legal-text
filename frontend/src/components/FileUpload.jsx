@@ -117,15 +117,19 @@ function FileUpload() {
       {result && (
         <div style={styles.resultBox}>
           <h3 style={{ marginBottom: "8px" }}>Prediction Result</h3>
-          <div><strong>Category:</strong> {result.label || "N/A"}</div>
-          <div>
-            <strong>Confidence:</strong>{" "}
-            {result.confidence
-              ? (result.confidence * 100).toFixed(2) + "%"
-              : "N/A"}
-          </div>
-        </div>
-      )}
+
+        <div>
+          <strong>Category:</strong>{" "}
+          {result.label ||
+            result.prediction ||
+            result.class ||
+            result.category ||
+            "unknown"}
+      </div>
+  </div>
+)}
+
+       
 
       {error && (
         <div style={styles.errorBox}>
