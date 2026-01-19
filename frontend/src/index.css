@@ -1,0 +1,37 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont;
+  color: #0f172a;
+  min-height: 100vh;
+
+  /* Gradient + subtle image */
+  background:
+    linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.9),
+      rgba(30, 58, 138, 0.85)
+    ),
+    url("https://images.unsplash.com/photo-1589829545856-d10d557cf95f");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+h1 {
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+p {
+  margin-top: 0;
+  color: #475569;
+}
+
+button {
+  font-family: inherit;
+}
