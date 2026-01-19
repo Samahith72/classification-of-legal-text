@@ -1,2 +1,162 @@
-# classification-of-legal-text
-Classification of Legal Text using NLP and Machine Learning
+# Legal Text Classification System
+
+An end-to-end machine learning web application that classifies legal documents  
+(e.g., Civil, Criminal, Contract) using NLP and a clean React-based frontend.
+
+This project follows an industry-style architecture with separate frontend and backend layers and a feature-branch Git workflow.
+
+---
+
+##  Features
+
+- Upload legal documents (PDF / TXT)  
+- Automatic text extraction  
+- NLP preprocessing pipeline  
+- Machine learning–based case classification  
+- Clean React frontend UI  
+- Upload progress bar + simulation delay  
+- REST API backend using FastAPI  
+- Modular and scalable architecture  
+- Feature-branch–based Git workflow  
+
+---
+
+##  Tech Stack
+
+**Frontend**
+- React (Vite)  
+- Axios  
+
+**Backend**
+- FastAPI  
+- Python  
+
+**Machine Learning**
+- Scikit-learn  
+- NLTK  
+- TF-IDF Vectorizer  
+
+**Others**
+- Git & GitHub (feature-based workflow)  
+
+---
+
+## 📂 Project Structure
+
+classification-of-legal-text/
+│
+├── backend/ # FastAPI + ML backend
+│ ├── app/
+│ │ ├── api/
+│ │ │ └── predict.py
+│ │ ├── services/
+│ │ ├── models/
+│ │ └── utils/
+│ └── src/
+│ ├── train.py
+│ └── preprocessing.py
+│
+├── frontend/ # React frontend
+│ ├── public/
+│ ├── src/
+│ │ ├── components/
+│ │ │ └── FileUpload.jsx
+│ │ ├── services/
+│ │ │ └── api.js
+│ │ ├── App.jsx
+│ │ └── main.jsx
+│ └── package.json
+│
+├── features/ # Feature branches (development history)
+├── dev # Integration branch
+├── main # Stable branch
+└── README.md
+
+---
+
+## ▶️ How to Run Locally
+
+###  Backend Setup
+
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+Backend will start at:
+http://localhost:8000
+
+###   Frontend Setup
+cd frontend
+npm install
+npm run dev
+Frontend will start at:
+http://localhost:5173
+
+---
+
+## API Endpoint
+POST /predict
+
+Request (multipart/form-data)
+
+file → PDF or TXT legal document
+
+Response (example)
+{
+  "prediction": "Civil"
+}
+
+## Git Workflow
+This project follows a clean feature-branch workflow:
+- main → stable production-ready code
+- dev → integration branch
+- feature/* → all development work
+
+## Workflow Example:
+- git checkout dev
+- git pull origin dev
+- git checkout -b feature/frontend-api-integration
+
+# make changes
+
+git add .
+git commit -m "feat: integrate frontend with backend API"
+git push origin feature/frontend-api-integration
+
+git checkout dev
+git merge feature/frontend-api-integration
+git push origin dev
+---
+
+## Versioning
+- v1.0 → Working MVP
+- Frontend UI
+- File upload
+- ML integration
+- Progress bar
+- Clean result UI
+
+---
+
+## Current Limitations
+- No confidence score output from ML model
+- No chunking for very large files
+- No database integration
+- No deployment yet
+
+---
+
+## Planned Enhancements
+- Large file support (chunked processing)
+- Confidence score output
+- Dashboard analytics
+- Multi-file upload
+- Downloadable reports
+- Cloud deployment
+- Authentication system
+
+---
+
+## developed by
+Samahith Mestri
+Hanoch Christian R
