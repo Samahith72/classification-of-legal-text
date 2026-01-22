@@ -1,4 +1,5 @@
 from datasets import load_dataset
+from article_mapping import ARTICLE_MAP
 import csv
 import random
 from collections import Counter
@@ -19,8 +20,13 @@ for item in dataset:
     if len(labels) != 1:
         continue
 
-    label = f"Article_{labels[0]}"
+    article = f"Article_{labels[0]}"
+    if article not in ARTICLE_MAP:
+        continue
+
+    label = article  # still keep Article_X as label
     data.append([text, label])
+
 
 print("Total usable samples:", len(data))
 

@@ -24,9 +24,12 @@ async def predict(file: UploadFile = File(...)):
         )
 
     # Predict label
-    label = predict_label(text)
+    result = predict_label(text)
 
     return {
         "filename": file.filename,
-        "prediction": label
+        "article": result["article"],
+        "description": result["description"],
+        "confidence": result["confidence"]
     }
+

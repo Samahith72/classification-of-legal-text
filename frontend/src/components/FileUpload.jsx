@@ -118,18 +118,21 @@ function FileUpload() {
         <div style={styles.resultBox}>
           <h3 style={{ marginBottom: "8px" }}>Prediction Result</h3>
 
-        <div>
-          <strong>Category:</strong>{" "}
-          {result.label ||
-            result.prediction ||
-            result.class ||
-            result.category ||
-            "unknown"}
-      </div>
-  </div>
-)}
+          <div>
+            <strong>Article:</strong> {result.article || "Unknown"}
+          </div>
 
-       
+          <div>
+            <strong>Description:</strong> {result.description || "Unknown"}
+          </div>
+
+          {result.confidence !== null && result.confidence !== undefined && (
+            <div>
+              <strong>Confidence:</strong> {result.confidence}%
+            </div>
+          )}
+        </div>
+      )}
 
       {error && (
         <div style={styles.errorBox}>
@@ -192,7 +195,7 @@ const styles = {
     cursor: "pointer"
   },
 
-  /* NEW STYLES (non-breaking) */
+  /* Progress bar styles */
   progressContainer: {
     marginTop: "14px",
     height: "10px",
