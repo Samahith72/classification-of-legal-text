@@ -5,3 +5,4 @@ venv/
 ml/models/
 ml/data/raw/
 node_modules/
+ml/data/raw/
